@@ -1,0 +1,49 @@
+--- a/Makefile	2020-05-07 20:22:27.225319631 -0400
++++ b/Makefile	2020-05-07 20:23:12.830601291 -0400
+@@ -1,46 +1,5 @@
+-define get_rhel_version
+-	find -L $(kdir) -name 'version.h' -exec grep $(1) {} + | sort -u | awk -F ' ' '{print $$NF}'
+-endef
+-RHEL_MAJOR := $(shell $(call get_rhel_version,RHEL_MAJOR))
+-RHEL_MINOR := $(shell $(call get_rhel_version,RHEL_MINOR))
+-
+-ifneq (,$(RHEL_MAJOR))
+-OS_NAME = "rhel"
+-OS_VERSION = "$(RHEL_MAJOR).$(RHEL_MINOR)"
+-else ifneq (,$(wildcard /etc/os-release))
+-OS_NAME = "$(shell sed -n 's/^ID=\(.*\)/\1/p' /etc/os-release | tr -d '\"')"
+-# On CentOS/RHEL, users could have installed a kernel not distributed from RHEL
+-ifeq ("centos",$(OS_NAME))
+-OS_NAME="custom-rhel"
+-else ifeq ("rhel",$(OS_NAME))
+-OS_NAME="custom-rhel"
+-else
+-ifeq ("linuxmint",$(OS_NAME))
+-OS_NAME="ubuntu"
+-endif
+-OS_VERSION = $(shell sed -n 's/^VERSION_ID=\(.*\)/\1/p' /etc/os-release)
+-endif
+-else
+-OS_NAME = "unknown"
+-OS_VERSION = "0.0"
+-endif
+-
+-ifneq ($(findstring $(OS_NAME), "ubuntu" "sled" "sles" "opensuse" "opensuse-leap" "amzn" "custom-rhel" "fedora"),)
+-DRM_VER=$(shell sed -n 's/^VERSION = \(.*\)/\1/p' $(kdir)/Makefile)
+-DRM_PATCH=$(shell sed -n 's/^PATCHLEVEL = \(.*\)/\1/p' $(kdir)/Makefile)
+-else ifeq ("debian", $(OS_NAME))
+-real_kdir=$(shell echo $(kdir) | sed "s/build/source/")
+-DRM_VER=$(shell sed -n 's/^VERSION = \(.*\)/\1/p' $(real_kdir)/Makefile)
+-DRM_PATCH=$(shell sed -n 's/^PATCHLEVEL = \(.*\)/\1/p' $(real_kdir)/Makefile)
+-else ifeq ("rhel",$(OS_NAME))
+-ifneq ($(OS_VERSION),"8.0")
+-DRM_VER=$(shell sed -n 's/^RHEL_DRM_VERSION = \(.*\)/\1/p' $(kdir)/Makefile)
+-DRM_PATCH=$(shell sed -n 's/^RHEL_DRM_PATCHLEVEL = \(.*\)/\1/p' $(kdir)/Makefile)
+-else
+ DRM_VER=$(shell sed -n 's/^VERSION = \(.*\)/\1/p' $(kdir)/Makefile)
+ DRM_PATCH=$(shell sed -n 's/^PATCHLEVEL = \(.*\)/\1/p' $(kdir)/Makefile)
+-endif
+-endif
+ 
+ subdir-ccflags-y += \
+ 	-DDRM_VER=$(DRM_VER) \

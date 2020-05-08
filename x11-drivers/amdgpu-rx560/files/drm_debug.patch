@@ -1,0 +1,11 @@
+--- a/amd/amdgpu/smu_v11_0_i2c.c	2020-05-07 22:20:04.929598446 -0400
++++ b/amd/amdgpu/smu_v11_0_i2c.c	2020-05-07 22:20:42.100839370 -0400
+@@ -49,6 +49,8 @@
+ #define to_amdgpu_device(x) (container_of(x, struct amdgpu_ras, eeprom_control.eeprom_accessor))->adev
+ #define to_eeprom_control(x) container_of(x, struct amdgpu_ras_eeprom_control, eeprom_accessor)
+ 
++#define drm_debug 0
++
+ static void smu_v11_0_i2c_set_clock_gating(struct i2c_adapter *control, bool en)
+ {
+ 	struct amdgpu_device *adev = to_amdgpu_device(control);
