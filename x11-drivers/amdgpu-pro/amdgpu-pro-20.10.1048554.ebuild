@@ -61,7 +61,7 @@ CONFIG_CHECK="
 	DRM_TTM DRM_TTM_DMA_PAGE_POOL
 	DRM_SCHED
 	DRM_AMDGPU DRM_AMDGPU_CIK DRM_AMDGPU_SI DRM_AMDGPU_USERPTR
-	DRM_AMD_DC DRM_AMD_DC_DCN1_0 DRM_AMD_DC_DCN2_0 DRM_AMD_DC_DCN2_1"
+	DRM_AMD_DC"
 
 pkg_nofetch() {
 	einfo "Please download"
@@ -78,12 +78,8 @@ pkg_setup() {
 
 unpack_deb() {
 	echo ">>> Unpacking ${1##*/} to ${PWD}"
-	#unpack ./amdgpu-pro-${REV}-${BUILD}-ubuntu-18.04/$1
 	unpack $1
 	unpacker ./data.tar*
-
-	# Clean things up #458658.  No one seems to actually care about
-	# these, so wait until someone requests to do something else ...
 	rm -f debian-binary {control,data}.tar*
 }
 
@@ -263,9 +259,6 @@ src_prepare() {
 export QA_WX_LOAD="usr/lib64/dri/amdgpu_dri.so usr/lib64/amdgpu-pro/libglapi.so.1 usr/lib64/amdgpu-pro/libGL.so.1.2"
 
 src_install() {
-	[ -n "$QA_STRICT_EXECSTACK" ] && echo "ignoring QA_EXECSTACK"
-	dodoc AMDGPU-PRO-EULA.txt
-
 	insinto /etc
 	doins -r etc/amd
 
