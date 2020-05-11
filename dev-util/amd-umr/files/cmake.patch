@@ -1,0 +1,18 @@
+--- a/CMakeLists.txt	2020-05-10 16:42:04.803884155 -0400
++++ b/CMakeLists.txt	2020-05-10 16:58:53.891699731 -0400
+@@ -70,11 +70,15 @@
+ 
+ set(REQUIRED_EXTERNAL_LIBS
+   ${CURSES_LIBRARIES}
++  /usr/lib64/libtinfo.so
+   ${PCIACCESS_LIBRARIES}
+   Threads::Threads
+   ${LLVM_LIBS}
+   ${RT_LIBS}
+ )
++MESSAGE(STATUS "
++REQUIRED_EXTERNAL_LIBS = ${REQUIRED_EXTERNAL_LIBS}
++")
+ 
+ # Global setting: build everything position independent
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
