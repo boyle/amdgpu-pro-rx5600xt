@@ -24,6 +24,7 @@ BDEPEND="dev-util/patchelf"
 COMMON=">=virtual/opencl-3"
 DEPEND="${COMMON}"
 RDEPEND="${COMMON}
+	x11-libs/libdrm:2.4
 	!media-libs/mesa[opencl]" # Bug #686790
 
 QA_PREBUILT="/opt/amdgpu/lib*/*"
@@ -60,6 +61,8 @@ multilib_src_unpack() {
 
 	mkdir -p "${BUILD_DIR}" || die
 	pushd "${BUILD_DIR}" >/dev/null || die
+	unpack_deb "${S}/libgl1-amdgpu-pro-appprofiles_${MY_PV}_all.deb"
+	unpack_deb "${S}/opencl-amdgpu-pro-icd_${MY_PV}_${deb_abi:-${ABI}}.deb"
 	unpack_deb "${S}/opencl-orca-amdgpu-pro-icd_${MY_PV}_${deb_abi:-${ABI}}.deb"
 	unpack_deb "${S}/libdrm-amdgpu-amdgpu1_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
 	popd >/dev/null || die
@@ -76,9 +79,15 @@ multilib_src_install() {
 	dolib.so "opt/amdgpu/lib/${dir_abi}"/*
 
 	insinto /etc/OpenCL/vendors
-	echo "/opt/amdgpu/$(get_libdir)/libamdocl-orca${short_abi}.so" \
+	echo "/opt/amdgpu/$(get_libdir)/libamdocl${short_abi}.so" \
 		> "${T}/${SUPER_PN}-${ABI}.icd" || die "Failed to generate ICD file for ABI ${ABI}"
+	echo "/opt/amdgpu/$(get_libdir)/libamdocl-orca${short_abi}.so" \
+		> "${T}/${SUPER_PN}-orca-${ABI}.icd" || die "Failed to generate ICD file for ABI ${ABI}"
 	doins "${T}/${SUPER_PN}-${ABI}.icd"
+	doins "${T}/${SUPER_PN}-orca-${ABI}.icd"
+
+	insinto /etc/amd
+	doins etc/amd/amdapfxx.blb
 }
 
 multilib_src_install_all() {
@@ -88,17 +97,16 @@ multilib_src_install_all() {
 
 pkg_postinst() {
 	if [[ -z "${REPLACING_VERSIONS}" ]]; then
-		ewarn "Please note that using proprietary OpenCL libraries together with the"
-		ewarn "Open Source amdgpu stack is not officially supported by AMD. Do not ask them"
-		ewarn "for support in case of problems with this package."
+		ewarn "Using proprietary OpenCL libraries together with the Open Source amdgpu"
+		ewarn "stack is not officially supported by AMD. Do not ask them for support"
+		ewarn "in case of problems with this package."
 		ewarn ""
-		ewarn "Furthermore, if you have the whole AMDGPU-Pro stack installed this package"
-		ewarn "will almost certainly conflict with it. This might change once AMDGPU-Pro"
-		ewarn "has become officially supported by Gentoo."
+		ewarn "If installed, the AMDGPU-Pro driver stack will collide with this package."
 	fi
 
 	elog ""
-	elog "This package is now DEPRECATED on amd64 in favour of dev-libs/rocm-opencl-runtime."
-	elog "Moreover, it only provides legacy AMDGPU-Pro OpenCL libraries which are not compatible with Vega 10 and newer GPUs."
+	elog "This package is now deprecated on amd64 in favour of dev-libs/rocm-opencl-runtime for"
+	elog " GFX8 (Fiji, Polaris 10) and GFX9 (Vega 10, Vega 7nm). For GFX10 (Navi) cards, the"
+	elog " amdgpu-pro-opencl package is the only OpenCL option."
 	elog ""
 }
