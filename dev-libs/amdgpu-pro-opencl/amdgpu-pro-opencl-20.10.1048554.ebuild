@@ -24,7 +24,7 @@ BDEPEND="dev-util/patchelf"
 COMMON=">=virtual/opencl-3"
 DEPEND="${COMMON}"
 RDEPEND="${COMMON}
-	x11-libs/libdrm:2.4
+	>=x11-libs/libdrm-2.4.1.101
 	!media-libs/mesa[opencl]" # Bug #686790
 
 QA_PREBUILT="/opt/amdgpu/lib*/*"
@@ -64,7 +64,48 @@ multilib_src_unpack() {
 	unpack_deb "${S}/libgl1-amdgpu-pro-appprofiles_${MY_PV}_all.deb"
 	unpack_deb "${S}/opencl-amdgpu-pro-icd_${MY_PV}_${deb_abi:-${ABI}}.deb"
 	unpack_deb "${S}/opencl-orca-amdgpu-pro-icd_${MY_PV}_${deb_abi:-${ABI}}.deb"
-	unpack_deb "${S}/libdrm-amdgpu-amdgpu1_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
+	unpack_deb "${S}/opencl-amdgpu-pro-comgr_${MY_PV}_${deb_abi:-${ABI}}.deb"
+	#unpack_deb "${S}/libdrm-amdgpu-common_1.0.0-${patchlevel}_all.deb"
+	#unpack_deb "${S}/libdrm-amdgpu-amdgpu1_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
+	#unpack_deb "${S}/libdrm-amdgpu-radeon1_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
+	#unpack_deb "${S}/libdrm-amdgpu-utils_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
+	#unpack_deb "${S}/libdrm-amdgpu-dev_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
+	#unpack_deb "${S}/libdrm2-amdgpu_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
+
+# 	unpack_deb "${S}/amdgpu-pro-core_20.10-1048554_all.deb"
+# 	unpack_deb "${S}/amdgpu-pro-hwe_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/amdgpu-pro-lib32_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/amdgpu-pro-pin_20.10-1048554_all.deb"
+# 	unpack_deb "${S}/amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/amf-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/clinfo-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/clinfo-amdgpu-pro_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/hip-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libegl1-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libegl1-amdgpu-pro_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-appprofiles_20.10-1048554_all.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-dri_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-dri_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-ext-hwe_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-ext-hwe_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-ext_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-ext_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-glx_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libgl1-amdgpu-pro-glx_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/libglapi1-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libglapi1-amdgpu-pro_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/libgles2-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libgles2-amdgpu-pro_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/libopencl1-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/libopencl1-amdgpu-pro_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/opencl-amdgpu-pro-comgr_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/opencl-amdgpu-pro-dev_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/opencl-amdgpu-pro-icd_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/opencl-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/opencl-orca-amdgpu-pro-icd_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/opencl-orca-amdgpu-pro-icd_20.10-1048554_i386.deb"
+# 	unpack_deb "${S}/vulkan-amdgpu-pro_20.10-1048554_amd64.deb"
+# 	unpack_deb "${S}/vulkan-amdgpu-pro_20.10-1048554_i386.deb"
 	popd >/dev/null || die
 }
 
@@ -75,8 +116,12 @@ multilib_src_install() {
 
 	into "/opt/amdgpu"
 	patchelf --set-rpath '$ORIGIN' "opt/${SUPER_PN}/lib/${dir_abi}"/libamdocl-orca${short_abi}.so || die "Failed to fix library rpath"
+	#rm -rf "opt/amdgpu/lib/${dir_abi}/pkgconfig"
 	dolib.so "opt/${SUPER_PN}/lib/${dir_abi}"/*
-	dolib.so "opt/amdgpu/lib/${dir_abi}"/*
+	#dolib.so "opt/amdgpu/lib/${dir_abi}"/*
+
+	#dobin "opt/amdgpu/bin"/*
+	#dobin "opt/amdgpu-pro/bin"/*
 
 	insinto /etc/OpenCL/vendors
 	echo "/opt/amdgpu/$(get_libdir)/libamdocl${short_abi}.so" \
@@ -92,7 +137,7 @@ multilib_src_install() {
 
 multilib_src_install_all() {
 	insinto "/opt/amdgpu"
-	doins -r opt/amdgpu/share
+	#doins -r opt/amdgpu/share
 }
 
 pkg_postinst() {
