@@ -65,6 +65,7 @@ multilib_src_unpack() {
 	unpack_deb "${S}/opencl-amdgpu-pro-icd_${MY_PV}_${deb_abi:-${ABI}}.deb"
 	unpack_deb "${S}/opencl-orca-amdgpu-pro-icd_${MY_PV}_${deb_abi:-${ABI}}.deb"
 	unpack_deb "${S}/opencl-amdgpu-pro-comgr_${MY_PV}_${deb_abi:-${ABI}}.deb"
+	#unpack_deb "${S}/clinfo-amdgpu-pro_${MY_PV}_${deb_abi:-${ABI}}.deb"
 	#unpack_deb "${S}/libdrm-amdgpu-common_1.0.0-${patchlevel}_all.deb"
 	#unpack_deb "${S}/libdrm-amdgpu-amdgpu1_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
 	#unpack_deb "${S}/libdrm-amdgpu-radeon1_${libdrm_ver}-${patchlevel}_${deb_abi:-${ABI}}.deb"
@@ -78,8 +79,6 @@ multilib_src_unpack() {
 # 	unpack_deb "${S}/amdgpu-pro-pin_20.10-1048554_all.deb"
 # 	unpack_deb "${S}/amdgpu-pro_20.10-1048554_amd64.deb"
 # 	unpack_deb "${S}/amf-amdgpu-pro_20.10-1048554_amd64.deb"
-# 	unpack_deb "${S}/clinfo-amdgpu-pro_20.10-1048554_amd64.deb"
-# 	unpack_deb "${S}/clinfo-amdgpu-pro_20.10-1048554_i386.deb"
 # 	unpack_deb "${S}/hip-amdgpu-pro_20.10-1048554_amd64.deb"
 # 	unpack_deb "${S}/libegl1-amdgpu-pro_20.10-1048554_amd64.deb"
 # 	unpack_deb "${S}/libegl1-amdgpu-pro_20.10-1048554_i386.deb"
@@ -114,8 +113,8 @@ multilib_src_install() {
 	[[ ${ABI} == x86 ]] && dir_abi=i386-linux-gnu && short_abi=32
 	[[ ${ABI} == amd64 ]] && dir_abi=x86_64-linux-gnu && short_abi=64
 
-	into "/opt/amdgpu"
-	patchelf --set-rpath '$ORIGIN' "opt/${SUPER_PN}/lib/${dir_abi}"/libamdocl-orca${short_abi}.so || die "Failed to fix library rpath"
+	#into "/opt/amdgpu"
+	#patchelf --set-rpath '$ORIGIN' "opt/${SUPER_PN}/lib/${dir_abi}"/libamdocl-orca${short_abi}.so || die "Failed to fix library rpath"
 	#rm -rf "opt/amdgpu/lib/${dir_abi}/pkgconfig"
 	dolib.so "opt/${SUPER_PN}/lib/${dir_abi}"/*
 	#dolib.so "opt/amdgpu/lib/${dir_abi}"/*
@@ -124,9 +123,11 @@ multilib_src_install() {
 	#dobin "opt/amdgpu-pro/bin"/*
 
 	insinto /etc/OpenCL/vendors
-	echo "/opt/amdgpu/$(get_libdir)/libamdocl${short_abi}.so" \
+	#echo "/opt/amdgpu/$(get_libdir)/libamdocl${short_abi}.so" \
+	echo "libamdocl${short_abi}.so" \
 		> "${T}/${SUPER_PN}-${ABI}.icd" || die "Failed to generate ICD file for ABI ${ABI}"
-	echo "/opt/amdgpu/$(get_libdir)/libamdocl-orca${short_abi}.so" \
+	#echo "/opt/amdgpu/$(get_libdir)/libamdocl-orca${short_abi}.so" \
+	echo "libamdocl-orca${short_abi}.so" \
 		> "${T}/${SUPER_PN}-orca-${ABI}.icd" || die "Failed to generate ICD file for ABI ${ABI}"
 	doins "${T}/${SUPER_PN}-${ABI}.icd"
 	doins "${T}/${SUPER_PN}-orca-${ABI}.icd"
