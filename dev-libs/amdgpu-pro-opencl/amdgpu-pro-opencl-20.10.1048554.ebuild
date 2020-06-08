@@ -109,12 +109,17 @@ multilib_src_unpack() {
 }
 
 multilib_src_install() {
-	local dir_abi short_abi
+	local dir_abi short_abi libdir
 	[[ ${ABI} == x86 ]] && dir_abi=i386-linux-gnu && short_abi=32
 	[[ ${ABI} == amd64 ]] && dir_abi=x86_64-linux-gnu && short_abi=64
 
 	#into "/opt/amdgpu"
 	#patchelf --set-rpath '$ORIGIN' "opt/${SUPER_PN}/lib/${dir_abi}"/libamdocl-orca${short_abi}.so || die "Failed to fix library rpath"
+	#libdir="opt/${SUPER_PN}/lib/${dir_abi}"
+	#for i in libamdocl-orca${short_abi}.so libamd_comgr.so libamdocl12cl${short_abi}.so libamdocl${short_abi}.so; do
+	#	patchelf --set-soname $i ${libdir}/$i || die "Failed to fix library soname"
+	#	#mv ${libdir}/$i ${libdir}/$i
+	#done
 	#rm -rf "opt/amdgpu/lib/${dir_abi}/pkgconfig"
 	dolib.so "opt/${SUPER_PN}/lib/${dir_abi}"/*
 	#dolib.so "opt/amdgpu/lib/${dir_abi}"/*
@@ -148,11 +153,10 @@ pkg_postinst() {
 		ewarn "in case of problems with this package."
 		ewarn ""
 		ewarn "If installed, the AMDGPU-Pro driver stack will collide with this package."
+		elog ""
 	fi
 
-	elog ""
 	elog "This package is now deprecated on amd64 in favour of dev-libs/rocm-opencl-runtime for"
-	elog " GFX8 (Fiji, Polaris 10) and GFX9 (Vega 10, Vega 7nm). For GFX10 (Navi) cards, the"
-	elog " amdgpu-pro-opencl package is the only OpenCL option."
-	elog ""
+	elog "GFX8 (Fiji, Polaris 10) and GFX9 (Vega 10, Vega 7nm). ROCM does not support Navi cards."
+	elog "For GFX10 (Navi) cards, the amdgpu-pro-opencl package is the only OpenCL option."
 }
