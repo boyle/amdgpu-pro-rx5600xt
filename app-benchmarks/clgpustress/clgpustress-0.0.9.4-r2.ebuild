@@ -13,8 +13,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="
-	|| (media-libs/mesa[opencl] dev-libs/amdgpu-pro-opencl)
-	dev-libs/clhpp dev-util/opencl-headers
+	|| ( media-libs/mesa[opencl] dev-libs/amdgpu-pro-opencl )
+	dev-libs/clhpp
+	dev-util/opencl-headers
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""
