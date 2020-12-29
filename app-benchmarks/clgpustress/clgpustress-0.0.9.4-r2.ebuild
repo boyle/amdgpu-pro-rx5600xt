@@ -12,7 +12,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="media-libs/mesa[opencl] dev-libs/clhpp dev-util/opencl-headers"
+DEPEND="
+	|| (media-libs/mesa[opencl] dev-libs/amdgpu-pro-opencl)
+	dev-libs/clhpp dev-util/opencl-headers
+"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 IUSE="-gui"
