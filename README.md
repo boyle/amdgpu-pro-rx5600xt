@@ -1,6 +1,7 @@
-This is a Gentoo ebuild overlay for AMD [RX 560](https://www.amd.com/en/products/graphics/radeon-rx-560) video card drivers.
+This is a Gentoo ebuild overlay for AMD [RX 5600 XT](https://www.amd.com/en/graphics/amd-radeon-rx-5600-series) and possibly the
+[RX 560](https://www.amd.com/en/products/graphics/radeon-rx-560) video card drivers.
 
-The AMD RX 560 requires [amdgpu-pro](https://www.amd.com/en/support/kb/release-notes/rn-amdgpu-unified-linux-20-10) drivers on Linux.
+The AMD RX 5600 XT and RX 560 require [amdgpu-pro](https://www.amd.com/en/support/kb/release-notes/rn-amdgpu-unified-linux-20-10) drivers on Linux.
 AMD's amdgpu-pro drivers only support Ubuntu x86 64-bit using the
 [Radeon Software for Linux Driver for Ubuntu 18.04.4 HWE](https://www.amd.com/en/support/graphics/radeon-500-series/radeon-rx-500-series/radeon-rx-560).
 This ebuild overlay repository re-packages the amdgpu-pro `.deb`s to install into Gentoo system.
@@ -15,14 +16,18 @@ The RX 560 product page calls out the
 released April 16, 2020,
 as the ones that should work with this hardware.
 
-The result is that the x11-drivers are *stubs* for future attempts to
-package AMD's "pro" drivers. (They've been left here for future reference.)
+I had a long battle to get the RX 560 working, but ultimately upgraded to the
+RX 5600 XT. It appears that development effort at AMD to support newer linux on
+the RX 560 has been discontinued. Development effort now focuses on the RX 5600
+XT, leaving the RX 560 dead in the water with a few show stopping bugs that were never fixed.
+
 I do *not* install the amdgpu-pro drivers, but I
 do use the amdgpu-pro-opencl implementation since a ROCm (open source) version
 is not available as of May 2020.
 
 A Working Configuration (May 2020)
 ----------------
+I am using an RX 5600 XT card.
 I do *not* use the core amdgpu-pro OpenGL drivers. The important changes have made it
 into kernel 5.6.8. 
 
@@ -33,7 +38,7 @@ amdgpu-pro-20.10 drivers. When the stable kernel branch (versus the 5.6.x develo
 branch) has integrated these changes, any Linux kernel should be good to go.
 
 On the other hand, the OpenCL drivers provided by AMD in the ROCm OpenCL code
-do not support the RX560 card. I use the amdgpu-pro-opencl packages on top of
+do not support the RX 5600 XT card. I use the amdgpu-pro-opencl packages on top of
 the kernel.
 This works for now, but it may fall out of sync at some point. It is not a
 supported configuration from AMD, but there is no alternative at this time.
@@ -56,7 +61,7 @@ I have installed:
  * app-benchmarks/gputest [this repository]
 
 ```
-/usr/src/linux-5.6.8-gentoo $ grep -e AMD -e DRM .config | grep -v -e '^#' | sed '/^$/d'
+/usr/src/linux-5.6.8-gentoo $ grep -e AMD -e DRM -e EXTRA_FIRMWARE .config | grep -v -e '^#' | sed '/^$/d'
 CONFIG_X86_AMD_PLATFORM_DEVICE=y
 CONFIG_CPU_SUP_AMD=y
 CONFIG_X86_MCE_AMD=y
@@ -92,6 +97,8 @@ CONFIG_DRM_PANEL_BRIDGE=y
 CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=y
 CONFIG_AMD_IOMMU=y
 CONFIG_AMD_IOMMU_V2=y
+CONFIG_EXTRA_FIRMWARE="amd-ucode/microcode_amd_fam17h.bin amd/amd_sev_fam17h_model0xh.sbin amdgpu/polaris11_ce.bin amdgpu/polaris11_ce_2.bin amdgpu/polaris11_k_smc.bin amdgpu/polaris11_k2_smc.bin amdgpu/polaris11_k_mc.bin amdgpu/polaris11_mc.bin amdgpu/polaris11_me.bin amdgpu/polaris11_me_2.bin amdgpu/polaris11_mec2.bin amdgpu/polaris11_mec2_2.bin amdgpu/polaris11_mec.bin amdgpu/polaris11_mec_2.bin amdgpu/polaris11_pfp.bin amdgpu/polaris11_pfp_2.bin amdgpu/polaris11_rlc.bin amdgpu/polaris11_sdma1.bin amdgpu/polaris11_sdma.bin amdgpu/polaris11_smc.bin amdgpu/polaris11_smc_sk.bin amdgpu/polaris11_uvd.bin amdgpu/polaris11_vce.bin amdgpu/navi10_asd.bin amdgpu/navi10_ce.bin amdgpu/navi10_gpu_info.bin amdgpu/navi10_me.bin amdgpu/navi10_mec.bin amdgpu/navi10_mec2.bin amdgpu/navi10_pfp.bin amdgpu/navi10_rlc.bin amdgpu/navi10_sdma.bin amdgpu/navi10_sdma1.bin amdgpu/navi10_smc.bin amdgpu/navi10_sos.bin amdgpu/navi10_ta.bin amdgpu/navi10_vcn.bin"
+CONFIG_EXTRA_FIRMWARE_DIR="/lib/firmware"
 ```
 It is possible that there are some missing kernel options. I have archived my
 kernel configuration, so we can work together to find what is missing, if necessary.
@@ -273,6 +280,11 @@ The RX 560 is a [Polaris 11](https://en.wikipedia.org/wiki/Radeon_RX_500_series)
 The current Gentoo `sys-kernel/linux-firmware-20200316` under `/lib/firmware/amdgpu/polaris11_*.bin`
 is the same microcode packaged in the `amdgpu-pro`'s `amdgpu-dkms-firmware_X.X.X.X-YYY_all.deb`.
 We use the Gentoo `linux-firmware` microcode.
+
+The RX 5600 XT firmware is also included in the most recent `linux-firmware`
+under the `navi` prefix: see `EXTRA_FIRMWARE` in the kernel configuration
+above.
+
 
 Instructions
 ------------
