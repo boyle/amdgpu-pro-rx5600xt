@@ -189,7 +189,7 @@ probably be fixed eventually without my intervention and is purely cosmetic.
 reports `AMD Radeon RX 5600 XT`.)
 
 I tested the amdgpu-pro drivers using a clean Ubuntu 18.04.4 desktop and `apt update`-ed as of April 26, 2020.
-The OpenCL stress test [`gpustress`](https://github.com/matszpk/clgpustress)
+The OpenCL stress test [`clgpustress`](https://github.com/matszpk/clgpustress)
 (packaged in this repository) was used to confirm that OpenCL only gave correct results once the amdgpu-pro legacy and PAL OpenCL drivers were installed.
 
 ```
@@ -197,12 +197,12 @@ tar -Jxvf amdgpu-pro-20.10-1048554-ubuntu-18.04.tar.xz
 cd amdgpu-pro-20.10-1048554-ubuntu-18.04
 ./amdgpu-install --pro -y --opencl=legacy,pal
 sudo reboot
-gpustress
+clgpustress
 ```
 
-A `gpustress` failure looks like
+A `clgpustress` failure looks like
 ```
-$ gpustress -w
+$ clgpustress -w
 CLGPUStress CLI 0.0.9.4 by Mateusz Szpakowski (matszpk@interia.pl)
 [...]
 
@@ -231,9 +231,9 @@ Failed StressTester for
 Failed #0
 ```
 
-A `gpustress` success looks like
+A `clgpustress` success looks like
 ```
-$ gpustress -w
+$ clgpustress -w
 CLGPUStress CLI 0.0.9.4 by Mateusz Szpakowski (matszpk@interia.pl)
 [...]
 
