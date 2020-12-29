@@ -10,7 +10,6 @@ SRC_URI="https://github.com/matszpk/${PN}/archive/${PV}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 DEPEND="
 	|| ( media-libs/mesa[opencl] dev-libs/amdgpu-pro-opencl )
