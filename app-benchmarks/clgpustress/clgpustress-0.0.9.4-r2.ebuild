@@ -18,12 +18,13 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""
-IUSE="-gui"
+IUSE="gui"
 
 PATCHES=("${FILESDIR}/cl2-hpp.patch")
 
 src_compile() {
 	if use gui; then
+		eerror "The GUI build is broken due to official cl2.hpp updates. This is unmaintained code."
 		emake
 	else
 		emake gpustress-cli
