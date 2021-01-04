@@ -4,7 +4,7 @@ This is a Gentoo ebuild overlay for AMD [RX 5600 XT](https://www.amd.com/en/grap
 The AMD RX 5600 XT and RX 560 require [amdgpu-pro](https://www.amd.com/en/support/kb/release-notes/rn-amdgpu-unified-linux-20-10) drivers on Linux.
 AMD's amdgpu-pro drivers only support Ubuntu x86 64-bit using the
 [Radeon Software for Linux Driver for Ubuntu 18.04.4 HWE](https://www.amd.com/en/support/graphics/radeon-500-series/radeon-rx-500-series/radeon-rx-560).
-This ebuild overlay repository re-packages the amdgpu-pro `.deb`s to install into Gentoo system.
+This ebuild overlay repository re-packages the amdgpu-pro `.deb`s to install into Gentoo systems.
 
 The amdgpu-pro driver package is proprietary, though AMD does a good job of open sourcing it's
 code into the mainline kernel as the amdgpu kernel driver.
